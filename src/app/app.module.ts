@@ -8,11 +8,16 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { IonicSwipeAllModule } from "ionic-swipe-all";
+import { MapPage } from './map/map.page';
+import { FIREBASE_CONFIG } from '../environments/firebase_config';
+import * as firebase from 'firebase'
 
+firebase.initializeApp(FIREBASE_CONFIG);
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicSwipeAllModule],
   providers: [
     StatusBar,
     SplashScreen,
