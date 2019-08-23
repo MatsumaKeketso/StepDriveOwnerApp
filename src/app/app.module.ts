@@ -12,16 +12,18 @@ import { IonicSwipeAllModule } from "ionic-swipe-all";
 import { MapPage } from './map/map.page';
 import { FIREBASE_CONFIG } from '../environments/firebase_config';
 import * as firebase from 'firebase'
+import { HttpClientModule } from "@angular/common/http";
 
 firebase.initializeApp(FIREBASE_CONFIG);
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicSwipeAllModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicSwipeAllModule,HttpClientModule],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    
   ],
   bootstrap: [AppComponent]
 })

@@ -23,8 +23,8 @@
       }
     }
     * {
-          transition: 0.3s;
-          transition-timing-function: cubic-bezier(.3,-0.01,.59,1.33) ;
+          transition: 0.5s;
+          transition-timing-function:cubic-bezier(.41,-0.37,.62,1.32);
     }
 .booking-active{
       width: 100%;
@@ -41,6 +41,7 @@
             text-align: center;
             color: white;
             padding: 2px 0px;
+            overflow: hidden;
       }
       .list{
             opacity: 1;
@@ -92,6 +93,41 @@
                         p {
                               font-size: 3vw;
                               margin: 0;
+                        }
+                        .data-active {
+                              display: grid;
+                              align-content: center;
+                              height: 100%;
+                              p{
+                                    margin: 5px 0px;
+                              }
+                        }
+                        .data-inactive {
+                              display: grid;
+                              align-content: center;
+                              height: 55%;
+                              p{
+                                    margin: 5px 0px;
+                              }
+                        }
+                        
+                        .more-active {
+                              display: flex;
+                              transform: scale(1);
+                              div {
+                                    display: grid;
+                                    align-content: center;
+                                    padding: 0px 5px;
+                              }
+                        }
+                        .more-inactive {
+                              display: flex;
+                              transform: scale(0);
+                              div {
+                                    display: grid;
+                                    align-content: center;
+                                    padding: 0px 5px;
+                              }
                         }
                   }
                   .expand{
@@ -208,6 +244,7 @@
                               font-size: 3vw;
                               margin: 0;
                         }
+                        
                   }
                   .expand{
                         position: absolute;

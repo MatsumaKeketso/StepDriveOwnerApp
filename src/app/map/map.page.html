@@ -7,18 +7,30 @@
       <ion-icon name="arrow-dropdown-circle"></ion-icon>
   </div>
   <div class="list">
-    <div class="profile">
+    <div class="profile" *ngFor="let user of users" >
       <div class="image">
         <div class="img">
-            <img src="../../assets/icon/favicon.png" alt="">
+            <img src="{{user.image}}" (click)="setlocation(user.coords)">
         </div>
       </div>
       <div class="details">
-        <h3>Name Surname</h3>
-        <p>Date in: 27 Jul, 2019 11:00am</p>
-        <p>Date in: 27 Jul, 2019 11:00am</p>
+        <div [ngClass]="{'data-active': !more, 'data-inactive': more}">
+            <div>
+                <h3>{{user.name}}</h3>
+                <p>{{user.content}}</p>
+            </div>
+        </div>
+        <div [ngClass]="{'more-active': more, 'more-inactive': !more}">
+            <div>
+                <p>{{user.datein}}</p>
+                <p>{{user.dateout}}</p>
+            </div>
+            <div><p><b>Package: R{{user.package}}.00</b></p>
+              <p>2 Lessons</p>
+            </div>
+        </div>
       </div>
-      <div class="expand">
+      <div class="expand" (click)="showMore()">
           <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
       </div>
       <div class="buttons">
@@ -26,177 +38,6 @@
         <button id="decline">Decline</button>
       </div>
     </div>
-    <div class="profile">
-        <div class="image">
-          <div class="img">
-              <img src="../../assets/icon/favicon.png" alt="">
-          </div>
-        </div>
-        <div class="details">
-          <h3>Name Surname</h3>
-          <p>Date in: 27 Jul, 2019 11:00am</p>
-          <p>Date in: 27 Jul, 2019 11:00am</p>
-        </div>
-        <div class="expand">
-            <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
-        </div>
-        <div class="buttons">
-          <button id="accept">Accept</button>
-          <button id="decline">Decline</button>
-        </div>
-      </div>
-      <div class="profile">
-          <div class="image">
-            <div class="img">
-                <img src="../../assets/icon/favicon.png" alt="">
-            </div>
-          </div>
-          <div class="details">
-            <h3>Name Surname</h3>
-            <p>Date in: 27 Jul, 2019 11:00am</p>
-            <p>Date in: 27 Jul, 2019 11:00am</p>
-          </div>
-          <div class="expand">
-              <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
-          </div>
-          <div class="buttons">
-            <button id="accept">Accept</button>
-            <button id="decline">Decline</button>
-          </div>
-        </div>
-        <div class="profile">
-            <div class="image">
-              <div class="img">
-                  <img src="../../assets/icon/favicon.png" alt="">
-              </div>
-            </div>
-            <div class="details">
-              <h3>Name Surname</h3>
-              <p>Date in: 27 Jul, 2019 11:00am</p>
-              <p>Date in: 27 Jul, 2019 11:00am</p>
-            </div>
-            <div class="expand">
-                <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
-            </div>
-            <div class="buttons">
-              <button id="accept">Accept</button>
-              <button id="decline">Decline</button>
-            </div>
-          </div>
-          <div class="profile">
-              <div class="image">
-                <div class="img">
-                    <img src="../../assets/icon/favicon.png" alt="">
-                </div>
-              </div>
-              <div class="details">
-                <h3>Name Surname</h3>
-                <p>Date in: 27 Jul, 2019 11:00am</p>
-                <p>Date in: 27 Jul, 2019 11:00am</p>
-              </div>
-              <div class="expand">
-                  <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
-              </div>
-              <div class="buttons">
-                <button id="accept">Accept</button>
-                <button id="decline">Decline</button>
-              </div>
-            </div>
-            <div class="profile">
-                <div class="image">
-                  <div class="img">
-                      <img src="../../assets/icon/favicon.png" alt="">
-                  </div>
-                </div>
-                <div class="details">
-                  <h3>Name Surname</h3>
-                  <p>Date in: 27 Jul, 2019 11:00am</p>
-                  <p>Date in: 27 Jul, 2019 11:00am</p>
-                </div>
-                <div class="expand">
-                    <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
-                </div>
-                <div class="buttons">
-                  <button id="accept">Accept</button>
-                  <button id="decline">Decline</button>
-                </div>
-              </div>
-              <div class="profile">
-                  <div class="image">
-                    <div class="img">
-                        <img src="../../assets/icon/favicon.png" alt="">
-                    </div>
-                  </div>
-                  <div class="details">
-                    <h3>Name Surname</h3>
-                    <p>Date in: 27 Jul, 2019 11:00am</p>
-                    <p>Date in: 27 Jul, 2019 11:00am</p>
-                  </div>
-                  <div class="expand">
-                      <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
-                  </div>
-                  <div class="buttons">
-                    <button id="accept">Accept</button>
-                    <button id="decline">Decline</button>
-                  </div>
-                </div>
-                <div class="profile">
-                    <div class="image">
-                      <div class="img">
-                          <img src="../../assets/icon/favicon.png" alt="">
-                      </div>
-                    </div>
-                    <div class="details">
-                      <h3>Name Surname</h3>
-                      <p>Date in: 27 Jul, 2019 11:00am</p>
-                      <p>Date in: 27 Jul, 2019 11:00am</p>
-                    </div>
-                    <div class="expand">
-                        <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
-                    </div>
-                    <div class="buttons">
-                      <button id="accept">Accept</button>
-                      <button id="decline">Decline</button>
-                    </div>
-                  </div>
-                  <div class="profile">
-                      <div class="image">
-                        <div class="img">
-                            <img src="../../assets/icon/favicon.png" alt="">
-                        </div>
-                      </div>
-                      <div class="details">
-                        <h3>Name Surname</h3>
-                        <p>Date in: 27 Jul, 2019 11:00am</p>
-                        <p>Date in: 27 Jul, 2019 11:00am</p>
-                      </div>
-                      <div class="expand">
-                          <p><ion-icon name="arrow-dropdown"></ion-icon></p>
-                      </div>
-                      <div class="buttons">
-                        <button id="accept">Accept</button>
-                        <button id="decline">Decline</button>
-                      </div>
-                    </div>
-                    <div class="profile">
-                        <div class="image">
-                          <div class="img">
-                              <img src="../../assets/icon/favicon.png" alt="">
-                          </div>
-                        </div>
-                        <div class="details">
-                          <h3>Name Surname</h3>
-                          <p>Date in: 27 Jul, 2019 11:00am</p>
-                          <p>Date in: 27 Jul, 2019 11:00am</p>
-                        </div>
-                        <div class="expand">
-                            <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
-                        </div>
-                        <div class="buttons">
-                          <button id="accept">Accept</button>
-                          <button id="decline">Decline</button>
-                        </div>
-                      </div>
   </div>
 </div>
 </ion-content>
