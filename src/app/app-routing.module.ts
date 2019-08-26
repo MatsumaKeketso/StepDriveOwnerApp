@@ -13,7 +13,9 @@ const routes: Routes = [
   { path: 'register', loadChildren: './register/register.module#RegisterPageModule' },
   { path: 'awaiting', loadChildren: './awaiting/awaiting.module#AwaitingPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
-  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
+  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },  { path: 'graphs', loadChildren: './graphs/graphs.module#GraphsPageModule' },
+  { path: 'past-b', loadChildren: './past-b/past-b.module#PastBPageModule' },
+
 ];
 
 @NgModule({
