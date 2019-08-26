@@ -70,7 +70,7 @@ export class MapPage implements OnInit {
         this.infoWindow.setPosition(this.mapCenter);
         this.infoWindow.setContent('Me');
         this.infoWindow.open(this.showMap);
-        this.initMap();
+        // this.initMap();
         this.addMarker(marker);
       }, err => {
         this.handleLoacationError('Geolocation service failed', this.showMap.center())
@@ -79,26 +79,26 @@ export class MapPage implements OnInit {
       this.handleLoacationError('No geolocation available', this.showMap.center());
     }
   }
-  mapOptions() {
+  // mapOptions() {
     
-    const mapOptions: google.maps.MapOptions = {
-      center: this.mapCenter,
-      disableDefaultUI: true, // disable a set of controls that display by default
-      minZoom: 10, // limit to how much you can zoom out
-      maxZoom: 17, // limit to how much you zoom in
-      zoom: 10,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      restriction: {
-        latLngBounds: this.SOUTH_AFRICAN_BOUNDS,
-        strictBounds: false
-      }
-    }
-    return mapOptions;
-  }
-  initMap(){
-    // new map
-    this.showMap = new google.maps.Map(this.showMap.nativeElement, this.mapOptions());
-  }
+  //   const mapOptions: google.maps.MapOptions = {
+  //     center: this.mapCenter,
+  //     disableDefaultUI: true, // disable a set of controls that display by default
+  //     minZoom: 10, // limit to how much you can zoom out
+  //     maxZoom: 17, // limit to how much you zoom in
+  //     zoom: 10,
+  //     mapTypeId: google.maps.MapTypeId.ROADMAP,
+  //     restriction: {
+  //       latLngBounds: this.SOUTH_AFRICAN_BOUNDS,
+  //       strictBounds: false
+  //     }
+  //   }
+  //   return mapOptions;
+  // }
+  // initMap(){
+  //   // new map
+  //   this.showMap = new google.maps.Map(this.showMap.nativeElement, this.mapOptions());
+  // }
 
   // add marker function 
   addMarker(props) {
