@@ -13,6 +13,8 @@ import { MapPage } from './map/map.page';
 import { FIREBASE_CONFIG } from '../environments/firebase_config';
 import * as firebase from 'firebase'
 import { HttpClientModule } from "@angular/common/http";
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx'
 
 firebase.initializeApp(FIREBASE_CONFIG);
 @NgModule({
@@ -23,7 +25,8 @@ firebase.initializeApp(FIREBASE_CONFIG);
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    
+    Geolocation,
+    NativeGeocoder
   ],
   bootstrap: [AppComponent]
 })

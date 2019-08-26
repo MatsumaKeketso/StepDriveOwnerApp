@@ -34,8 +34,8 @@
           <p><ion-icon name="arrow-dropdown-circle"></ion-icon></p>
       </div>
       <div class="buttons">
-        <button id="accept">Accept</button>
-        <button id="decline">Decline</button>
+        <button id="accept" (click)="acceptRequest(user)">Accept</button>
+        <button id="decline" (click)="declineRequests(user)">Decline</button>
       </div>
     </div>
   </div>
