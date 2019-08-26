@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterContentInit, asNativeElements } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import * as firebase from 'firebase';
 import { LoadingController, AlertController, ToastController } from '@ionic/angular';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
@@ -44,8 +44,8 @@ export class MapPage implements OnInit {
   constructor(public loadingCtrl: LoadingController, public alertCtrl: AlertController, public toastCtrl: ToastController, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) { }
 
   ngOnInit() {
-    this.getusers();
-    this.getLocation();
+    // this.getusers();
+    // this.getLocation();
   }
   setlocation(coords) {
     console.log(coords);
@@ -100,7 +100,6 @@ export class MapPage implements OnInit {
     // new map
     this.showMap = new google.maps.Map(this.showMap.nativeElement, this.mapOptions());
   }
-
   // add marker function 
   addMarker(props) {
     // add marker
