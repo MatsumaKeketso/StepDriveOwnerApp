@@ -1,0 +1,67 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    background: url('../../assets/Mask\ Group\ 5.png');
+    .login {
+        height: 10%;
+        h1{
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+    .email {
+        height: 20%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        outline: none;
+        margin-bottom: 20px;
+        p {
+            position: absolute;
+            background: maroon;
+            color: white;
+            border-radius: 5px;
+            left: 25%;
+            top: -40%;
+            font-size: 15px;
+            width: 15%;
+            text-align: center;
+            height: 15px;
+        }
+        input {
+            height: 50px;
+            width: 60%;
+            border-radius: 20px;
+            background: transparent;
+            border: 1px solid white;
+        }
+    }
+    .password {
+        height: 20%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        outline: none;
+        p {
+            position: absolute;
+            background: maroon;
+            color: white;
+            border-radius: 5px;
+            left: 25%;
+            top: -40%;
+            font-size: 15px;
+            width: 25%;
+            text-align: center;
+            height: 15px;
+        }
+        input {
+            height: 50px;
+            width: 60%;
+            border-radius: 20px;
+            background: transparent;
+            border: 1px solid white;
+        }
+    }
+}
