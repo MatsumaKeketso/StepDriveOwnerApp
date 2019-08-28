@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AwaitingPage } from '../awaiting/awaiting.page';
+import { Camera,CameraOptions } from '@ionic-native/Camera/ngx';
 import { Router } from '@angular/router';
 
+import { RegisterPage } from '../register/register.page';
+import { HomePage } from '../home/home.page';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
@@ -32,7 +35,7 @@ export class ProfilePage implements OnInit {
   businessdata = {
     schoolname: '',
     registration: '',
-    // image: '',
+    image: '',
     email: '',
     cellnumber: '',
     cost: '',
@@ -40,15 +43,15 @@ export class ProfilePage implements OnInit {
     address: '',
     open: '',
     closed: '',
-    allday: '',
+    allday: 'true',
   }
 
 
   validation_messages = {
     'schoolname': [
-      {type: 'required', message: 'Schoolname address is required.'},
-      {type: 'pattern', message: 'Schoolname address is required'},
-      {type: 'validEmail', message: 'Schoolname address is required.'},
+      {type: 'required', message: 'email is required.'},
+      {type: 'minlength', message: 'email is valid.'},
+      {type: 'maxlength', message: 'email must be less than 10 char or less'},
     ],
     'registration': [
      {type: 'required', message: 'registration is required.'},
@@ -111,13 +114,20 @@ export class ProfilePage implements OnInit {
   //   allday: true
   // }
   profileForm: FormGroup
-  constructor(public formBuilder: FormBuilder ,public forms: FormBuilder) {
+  profileImage: string;
+  userProv: any;
+  uploadprogress: number;
+  isuploading: boolean;
+  userProfile: any;
+  isuploaded: boolean;
+  imageSelected: boolean;
+  constructor(public formBuilder: FormBuilder ,public forms: FormBuilder,public router:Router,public camera: Camera,) {
     
     this.loginForm = this.forms.group({
       schoolname: new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$')])),
       registration: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(10)])),
       email: new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$')])),
-      cellnumber: new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$')])),
+      cellnumber: new FormControl('', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])),
       cost: new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$')])),
       desc: new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$')])),
       address: new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$')])),
@@ -126,57 +136,66 @@ export class ProfilePage implements OnInit {
       allday: new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$')])),
     })
 
-    // this.profileForm = this.formBuilder.group({
-    //   schoolname: new FormControl ('', Validators.compose([
-    //     Validators.required,
-    //   ])),
-    // registration: new FormControl ('', Validators.compose([
-    //   Validators.required,
-    // ])),
-    // image: new FormControl ('', Validators.compose([
-    //   Validators.required,
-    // ])),
-    // email: new FormControl ('', Validators.compose([
-    //   Validators.required,
-    //   Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
-    //   Validators.maxLength(50),
-    //   Validators.minLength(6)
-    // ])),
-    // cellnumber: new FormControl ('', Validators.compose([
-    //   Validators.required,
-    // ])),
-    // cost: new FormControl ('', Validators.compose([
-    //   Validators.required,
-    // ])),
-    // desc: new FormControl ('', Validators.compose([
-    //   Validators.required,
-    // ])),
-    // address: new FormControl ('', Validators.compose([
-    //   Validators.required,
-    // ])),
-    // open: new FormControl ('2019-08-22T00:00:32.767+02:00', Validators.compose([
-    //   Validators.required,
-    // ])),
-    // closed: new FormControl ('2019-08-22T00:00:32.767+02:00', Validators.compose([
-    //   Validators.required,
-    // ])),
-    // allday: new FormControl ('true', Validators.compose([
-    //   Validators.required,
-    // ]))
-    // })
+   
+
   }
 
   ngOnInit() {
   }
-await(){
+
+
+  // image upload
+
+  async selectImage(){
+    let option: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      correctOrientation: true,
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM
+    }
+    await this.camera.getPicture(option).then( res => {
+      console.log(res);
+      const image = `data:image/jpeg;base64,${res}`;
+
+      this.profileImage = image;
+      // const UserImage = this.storage.child(this.userProv.getUser().uid+'.jpg');
+      let imageRef =this.storage.child('image').child('imageName');
+
+    const upload = imageRef.putString(image, 'data_url');
+     upload.on('state_changed', snapshot => {
+       let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+       this.uploadprogress = progress;
+       if (progress == 100){
+        this.isuploading = false;
+       }
+     }, err => {
+     }, () => {
+      upload.snapshot.ref.getDownloadURL().then(downUrl => {
+        this.userProfile.image = downUrl;
+        console.log('Image downUrl', downUrl);
+
+        this.isuploaded = true;
+      })
+     })
+    }, err => {
+      console.log("Something went wrong: ", err);
+    })
+    this.imageSelected = true;
+  }
   
-}
+
+
+
+  // await(){
+  //   this.router.navigateByUrl('/Awaiting')
+  // }
   createAccount(){
-  
         
         this.db.collection('businesses').doc(this.businessdata.schoolname).set(this.businessdata).then(res => {
           console.log('Profile created');
-          
+          this.router.navigateByUrl('/awaiting')
         }).catch(error => {
           console.log('Error');
         });
