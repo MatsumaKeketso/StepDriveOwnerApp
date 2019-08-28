@@ -1,5 +1,7 @@
-import { Component, OnInit, ViewChild, AfterContentInit, asNativeElements } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import * as firebase from 'firebase';
+import { LoadingController, AlertController, ToastController } from '@ionic/angular';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 declare var google;
 // declare var axios;
 @Component({
@@ -23,7 +25,7 @@ export class MapPage implements OnInit {
   //  referring to the div showing the map
   @ViewChild('map', {static: true}) showMap;
   db = firebase.firestore();
-  map;
+
   infoWindow = new google.maps.InfoWindow;
   // restriction for the map
   SOUTH_AFRICAN_BOUNDS = {
@@ -37,25 +39,31 @@ export class MapPage implements OnInit {
     lat: 0,
     lng: 0
   }
-  constructor() { }
+  geoAccuracy: number;
+  geoAddress: string;
+  constructor(public loadingCtrl: LoadingController, public alertCtrl: AlertController, public toastCtrl: ToastController, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) { }
 
   ngOnInit() {
-    this.getusers();
-    this.getLocation();
+    // this.getusers();
+    // this.getLocation();
   }
   setlocation(coords) {
     console.log(coords);
     
-    this.mapCenter = coords;
+    this.infoWindow.setPosition(coords);
   }
   getLocation(){
     // map options
     // get the device geo location or handle any errors
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(res => {
-        
-        this.mapCenter = {
+    this.geolocation.getCurrentPosition(res => {
+      this.mapCenter.lat = res.coords.latitude;
+      this.mapCenter.lng = res.coords.longitude;
+      this.geoAccuracy = res.coords.accuracy;
+
+      const marker = {
+        coords: {
           lat: res.coords.latitude,
+<<<<<<< HEAD
           lng: res.coords.longitude
         };
         const marker = {
@@ -74,13 +82,28 @@ export class MapPage implements OnInit {
         this.addMarker(marker);
       }, err => {
         this.handleLoacationError('Geolocation service failed', this.showMap.center())
+=======
+        lng: res.coords.longitude
+        },
+        content: 'You',
+        name: ''
+      }
+      
+      this.infoWindow.setPosition(this.mapCenter);
+      this.infoWindow.open(this.showMap);
+      this.initMap();
+      this.addMarker(marker);
+    } , async err => {
+      const alerter = await this.alertCtrl.create({
+        message: 'Error getting location '+JSON.stringify(err)
+>>>>>>> f326a0c9042ac8b3b7a3dddbd344e921b11ec50c
       })
-    } else {
-      this.handleLoacationError('No geolocation available', this.showMap.center());
-    }
+      alerter.present()
+    })
   }
   // mapOptions() {
     
+<<<<<<< HEAD
   //   const mapOptions: google.maps.MapOptions = {
   //     center: this.mapCenter,
   //     disableDefaultUI: true, // disable a set of controls that display by default
@@ -100,6 +123,26 @@ export class MapPage implements OnInit {
   //   this.showMap = new google.maps.Map(this.showMap.nativeElement, this.mapOptions());
   // }
 
+=======
+    const mapOptions: google.maps.MapOptions = {
+      center: this.mapCenter,
+      disableDefaultUI: true, // disable a set of controls that display by default
+      minZoom: 10, // limit to how much you can zoom out
+      maxZoom: 17, // limit to how much you zoom in
+      zoom: 10,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      restriction: {
+        latLngBounds: this.SOUTH_AFRICAN_BOUNDS,
+        strictBounds: false
+      }
+    }
+    return mapOptions;
+  }
+  initMap(){
+    // new map
+    this.showMap = new google.maps.Map(this.showMap.nativeElement, this.mapOptions());
+  }
+>>>>>>> f326a0c9042ac8b3b7a3dddbd344e921b11ec50c
   // add marker function 
   addMarker(props) {
     // add marker
@@ -140,11 +183,95 @@ export class MapPage implements OnInit {
     this.more = !this.more;
   }
   getusers(){
-    this.db.collection('users').get().then(snapshot => {
+    this.db.collection('users').onSnapshot(snapshot => {
       snapshot.forEach(doc => {
         this.users.push(doc.data());
         this.addMarker(doc.data());
       })
     })
+  }
+  async acceptRequest(person) {
+    const loading = await this.loadingCtrl.create({
+      message: 'Working',
+      spinner: 'lines'
+    })
+    loading.present();
+    //copy the document from 'users' to 'accepted'
+    this.db.collection('accepted').doc(person.content).set(person).then(res => {
+      // delete the document from the 'users' collection
+      this.db.collection('users').doc(person.content).delete().then(async res => {
+        loading.dismiss();
+        const toast = await this.toastCtrl.create({
+          message: 'Request accepted',
+          duration: 3000
+        })
+        toast.present();
+      }).catch( async err => {
+        loading.dismiss();
+        console.log(err);
+      const alerter = await this.alertCtrl.create({
+        message: 'Something went wrong. Try again later.',
+        buttons: [
+          {
+            text: 'Okay'
+          }
+        ]
+      })
+      })
+      // catch any errors that happen during the creation
+    }).catch(async err => {
+      loading.dismiss();
+      console.log(err);
+      const alerter = await this.alertCtrl.create({
+        message: 'Something went wrong. Please try again.',
+        buttons: [
+          {
+            text: 'Okay'
+          }
+        ]
+      })
+    })
+    
+  }
+  async declineRequests(person){
+    const alerter = await this.alertCtrl.create({
+      header: 'Decline Request?',
+      message: `Are you sure you want to decline ${person.name}'s request?`,
+      buttons: [
+        {
+          text: 'Yes',
+          handler: async data => {
+            const loader = await this.loadingCtrl.create({
+              message: 'Working',
+              spinner: 'lines'
+            })
+            loader.present();
+            this.db.collection('users').doc(person.content).delete().then(async res=>{
+              loader.dismiss()
+              const toaster = await this.toastCtrl.create({
+                message: 'Declined Request',
+                duration: 3000
+              })
+              toaster.present()
+            }).catch( async err => {
+              loader.dismiss()
+              const alerter = await this.alertCtrl.create({
+                message: 'Something went wrong. Please try again later',
+                buttons: [
+                  {
+                    text:'Okay'
+                  }
+                ]
+              })
+            })
+          }
+        },
+        {
+          text: 'No',
+          role: 'cancel'
+        }
+      ]
+    })
+    alerter.present();
   }
 }
